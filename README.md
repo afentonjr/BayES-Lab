@@ -2,7 +2,7 @@
 
 BayES’Lab (Bayesian Electroactive Species Labeling) is a repository of functions that can both 1) estimate electrochemical-transport parameters of redox active species and 2) infer the identities of electroactive compounds catalogued in a library from an experimental electrochemical dataset. Each of these functions is separately presented as its own subroutine and can be run independently, if desired.
 
-See below for implementation instructions and details. Further, this repository was developed for and in tandem with the manuscript “_____________”. <b><i>Please cite this paper if you use this package.</b></i>
+See below for implementation instructions and details. Further, this repository was developed for and in tandem with the manuscript “Using voltammetry augmented with physics-based modeling and Bayesian hypothesis testing to estimate electrolyte composition" (to be submitted). <b><i>Please cite this paper if you use this package.</b></i>
 
 <b>Code style:</b> MATLAB®
 
