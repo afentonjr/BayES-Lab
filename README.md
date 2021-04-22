@@ -188,7 +188,7 @@ Navigate to the directory where you would like the local copy of the source code
 
 ```
 
-git clone git@github.mit.edu:afenton/BayES-Lab.git
+git clone git@github.com:afentonjr/BayES-Lab.git
 
 ```
 
