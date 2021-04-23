@@ -26,10 +26,10 @@ addpath('Compound Identification');
 
 % Load files
 PTMPTCVdatafirstelyte=load('Compound Identification\2021-03-23-PT-MPT-CV-Data-All-Trials-First-Electrolyte-Adjusted-Potential.mat');
-params_indataCV=load('Compound Identification\2020-07-21-Input-Params-CV-Compound-Identify.mat');
+params_indataCV=load('Compound Identification\2021-04-22-Input-Params-CV-Compound-Identify.mat');
 library=load('Compound Identification\2021-04-13-Phenothiazine-Library.mat');
-cv_bg=load('Compound Identification\2020-07-19-Compound-Find-CV-Background-Data-Preprocessed.mat');
-cv_bgref=load('Compound Identification\2020-07-19-Compound-Find-CV-Background-Reference-Data-Preprocessed.mat');
+cv_bg=load('Compound Identification\2021-04-22-Compound-Find-CV-Background-Data.mat');
+cv_bgref=load('Compound Identification\2021-04-22-Compound-Find-CV-Background-Reference-Data.mat');
 prior=load('Compound Identification\2020-07-21-Prior-List.mat');
 
 % Expand structure
