@@ -2,7 +2,7 @@
 
 BayES’Lab (Bayesian Electroactive Species Labeling) is a repository of functions that can both 1) estimate electrochemical-transport parameters of redox active species and 2) infer the identities of electroactive compounds catalogued in a library from an experimental electrochemical dataset. Each of these functions is separately presented as its own subroutine and can be run independently, if desired.
 
-See below for implementation instructions and details. Further, this repository was developed for and in tandem with the manuscript “Using voltammetry augmented with physics-based modeling and Bayesian hypothesis testing to estimate electrolyte composition" (submitted). <b><i>Please cite this paper if you use this package.</b></i>
+See below for implementation instructions and details. Further, this repository was developed for and in tandem with the manuscript “Using voltammetry augmented with physics-based modeling and Bayesian hypothesis testing to estimate electrolyte composition" (submitted, preprint found <a href="https://chemrxiv.org/articles/preprint/Using_Voltammetry_Augmented_with_Physics-Based_Modeling_and_Bayesian_Hypothesis_Testing_to_Estimate_Electrolyte_Composition/14479707/1">here</a>). <b><i>Please cite this paper if you use this package.</b></i>
 
 <b>Code style:</b> MATLAB®
 
@@ -60,7 +60,7 @@ This module estimates both the electron transfer mechanism, along with the corre
 
 #### Example Script
 
-To run an example script for the library development of 1 mM unsubstituted phenothiazine in 0.1 M TBAPF6 in dichloromethane, <b>download the repository, set the directory to be "BayES-Lab-test-v01/", open the script "Example_Script_Library_Development_PT.m", and run the script (no function inputs are needed).</b> Note that the progress of the optimizer is output onto the command window to display its progress.
+To run an example script for the library development of 1 mM unsubstituted phenothiazine in 0.1 M TBAPF6 in dichloromethane, <b>download the repository, set the directory to be "BayES-Lab/", open the script "Example_Script_Library_Development_PT.m", and run the script (no function inputs are needed).</b> Note that the progress of the optimizer is output onto the command window to display its progress.
 
 #### Local Command Line Use (e.g., on a laptop)
 
@@ -79,7 +79,7 @@ params_inPT{6}=200;
 
 Note that the time mesh is expanded to 5 ms (from 1 ms), and only 1 initial guess (=ninitguess+1) is used, to achieve a simulation time that is feasible on a local computing resource (<i>ca</i>. 1 h using two cores with minimal background processes). Also note that for different compounds (e.g., MPT, EPT), appropriate variable names will have to be modified within the input string (e.g., “dataPTref” must become “dataMPTref”, "params_inPT" must be "params_inMPT").
 
-#### Supercomputer use
+#### Supercomputer Use
 
 It may be desirable to run the "Library Development" protocol with a greater time resolution, more initial guesses, or both. To this end, it is also possible to run the "Library Development" module on a supercomputing resource. Within the published work, we performed parameter estimation using the MIT Supercloud supercomputing resource. <i>The following instructions have only been verified for the MIT Supercloud supercomputing resource; alterations in procedure may be necessary for other supercomputing resources</i>. To perform the routine, we used an emacs script shown below as an example for PT:
 
@@ -163,7 +163,7 @@ This module estimates the composition of redox-active species in an electrolyte,
 
 #### Example Script
 
-To run an example script to estimate the composition of an electrolyte containing unsubstituted and methyl phenothiazine using CV, <b>download the repository, open the directory to be "BayES-Lab-test-v01/", open the script "Example_Script_Compound_Identification_CV.m", and run the script (no function inputs are needed).</b> Note that similarly to the library development module, text is output onto the command window to display the progress of the protocol.
+To run an example script to estimate the composition of an electrolyte containing unsubstituted and methyl phenothiazine using CV, <b>download the repository, open the directory to be "BayES-Lab/", open the script "Example_Script_Compound_Identification_CV.m", and run the script (no function inputs are needed).</b> Note that similarly to the library development module, text is output onto the command window to display the progress of the protocol.
 
 <b>To run an example script for CSW voltammetry taken from the same electrolyte, perform the above procedure for "Example_Script_Compound_Identification_CSWV.m".</b>
 
@@ -173,14 +173,52 @@ Note that with the exact inputs in this script, two warnings will appear that sa
 
 As with the library construction section, load the files by opening all the files with a ".mat" label in the "Compound Identification/" folder. Conversely, you can navigate to this directory in MATLAB® and type “load(‘___.mat’)” into the command window.
  
+##### Cyclic Square Wave Voltammetry
 
-Subsequently, type the following input into the command line.
+To run the protocol for a representative CSW voltammogram, type the following input into the command line.
 
 ```
 
 [P,conc0,concfinal,conclbfinal,concubfinal,Estep,inet0,inet,dataInet,Eref,simtime]=conc_compound_find(PTMPTdatafirstelyte(:,1:4),params_indata,99,library,bsubtract,0,dataFc_trunc,prior,0);
 
 ```
+
+To evaluate other datasets, change the first input to evaluate whichever dataset you would like to study. For example, if you want to evaluate the second dataset from the first electrolyte, the first input should be "PTMPTdatafirstelyte(:,5:8)", and if you want to evaluate the first dataset from the second electrolyte, the first input should be "PTMPTsecondelyte(:,1:4)". Note that each trial is represented by four columns in the data matrix. This general notation framework also holds for cyclic voltammograms, with one minor change (<i>vide infra</i>).
+
+In addition to changing the first input, the solution resistance must be updated accordingly. This can be performed by changing the 9th value of the "params_indata" cell from the vector "CSWV_sol_res". The resistances in "CSWV_sol_res" are grouped by electrolyte; for example, the second entry of this vector corresponds to the second trial of the first electrolyte. Further, the seventh entry corresponds to the first trial of the second electrolyte, and the 16th entry corresponds to the fourth trial of the third electrolyte, etc. <i>Explicitly, for the two cases described in the paragraph above, the lines "params_indata{9}=CSWV_sol_res(2);" and "params_indata{9}=CSWV_sol_res(7);" must also be respectively submitted before running the protocol. The table in the "Cyclic Voltammetry" subsection immediately below is labeled using the same methodology, and as such may also serve as a useful reference for connecting an electrolyte and trial number with the appropriate entry in "CSWV_sol_res".</i>
+
+##### Cyclic Voltammetry
+
+To run the protocol for a representative cyclic voltammogram, type the following input into the command line.
+
+```
+
+[Pcv,conc0cv,concfinalcv,conclbfinalcv,concubfinalcv,Estepcv,inet0cv,inetcv,dataInetcv,simtimecv]=conc_compound_find(PTMPTCVdatafirstelyte(169:end-168,1:2),params_indataCV,99,library,cv_bg,0,cv_bgref,prior,1);
+
+```
+
+To evaluate other cyclic voltammograms, more inputs need to be adjusted compared to the case with CSW voltammetry. The table below lists the inputs used to generate the results for all 18 cyclic voltammograms in the manuscript. In this table, note that "a" and "b" refer to the terms used in the first input of the code; specifically, "PTMPTCVdatafirstelyte(a:b,1:2)", etc. Other notation pertaining to the first input is the same as in the case of CSW voltammetry, except that input data for each trial is only two columns. As an example, the third trial of the second electrolyte should be written as "PTMPTCVdatasecondelyte(a:b,5:6)", rather than "PTMPTCVdatasecondelyte(a:b,9:12)". Further, the variables "CV_pps", "CV_sr", and "CV_sol_res" are .mat files located in the "Compound Identification" folder.
+
+| Electrolyte number (E):<br>Trial number (T) | a | b | params_indataCV{7} <br>(simulation time mesh,<br>points per second; 1/s) | params_indataCV{8} <br>(scan rate, mV/s) | params_indataCV{9} <br>(resistance, &Omega;) |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| E1:T1 | 169 | end-168 | CV_pps(1) | CV_sr(1) | CV_sol_res(1) |
+| E1:T2 | 169 | end-168 | CV_pps(2) | CV_sr(2) | CV_sol_res(2) |
+| E1:T3 | 169 | end-168 | CV_pps(3) | CV_sr(3) | CV_sol_res(3) |
+| E1:T4 | 149 | end-248 | CV_pps(4) | CV_sr(4) | CV_sol_res(4) |
+| E1:T5 | 155 | end-214 | CV_pps(5) | CV_sr(5) | CV_sol_res(5) |
+| E1:T6 | 90 | end-509 | CV_pps(6) | CV_sr(6) | CV_sol_res(6) |
+| E2:T1 | 155 | end-155 | CV_pps(7) | CV_sr(7) | CV_sol_res(7) |
+| E2:T2 | 155 | end-175 | CV_pps(8) | CV_sr(8) | CV_sol_res(8) |
+| E2:T3 | 155 | end-195 | CV_pps(9) | CV_sr(9) | CV_sol_res(9) |
+| E2:T4 | 155 | end-315 | CV_pps(10) | CV_sr(10) | CV_sol_res(10) |
+| E2:T5 | 155 | end-315 | CV_pps(11) | CV_sr(11) | CV_sol_res(11) |
+| E2:T6 | 55 | end-645 | CV_pps(12) | CV_sr(12) | CV_sol_res(12) |
+| E3:T1 | 200 | end-200 | CV_pps(13) | CV_sr(13) | CV_sol_res(13) |
+| E3:T2 | 200 | end-200 | CV_pps(14) | CV_sr(14) | CV_sol_res(14) |
+| E3:T3 | 200 | end-210 | CV_pps(15) | CV_sr(15) | CV_sol_res(15) |
+| E3:T4 | 180 | end-305 | CV_pps(16) | CV_sr(16) | CV_sol_res(16) |
+| E3:T5 | 180 | end-260 | CV_pps(17) | CV_sr(17) | CV_sol_res(17) |
+| E3:T6 | 90 | end-590 | CV_pps(18) | CV_sr(18) | CV_sol_res(18) |
 
 ## Developer Use
 
@@ -210,7 +248,7 @@ BayES’Lab is run exclusively in MATLAB®. Refer to the Installation section to
 
 ## Issues
 
-Before submitting your own issue, make sure the same one does not already exist by searching under <a href="https://github.mit.edu/afenton/BayES-Lab-test-v01/issues">issues</a>. If you do not locate a similar issue already, feel free to open a <a href="https://github.mit.edu/afenton/BayES-Lab-test-v01/issues/new">new issue</a>. When writing your issue, consider the following points and be as detailed as possible:
+Before submitting your own issue, make sure the same one does not already exist by searching under <a href="https://github.com/afentonjr/BayES-Lab/issues">issues</a>. If you do not locate a similar issue already, feel free to open a <a href="https://github.com/afentonjr/BayES-Lab/issues/new">new issue</a>. When writing your issue, consider the following points and be as detailed as possible:
 
 1.	Write step by step directions for replicating your issue
 2.	Describe what you would expect to happen and what you actually get
