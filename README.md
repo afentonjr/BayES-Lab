@@ -1,20 +1,20 @@
 # BayES’Lab (Bayesian Electroactive Species Labeling)
 
-BayES’Lab (Bayesian Electroactive Species Labeling) is a repository of functions that can both 1) estimate electrochemical-transport parameters of redox active species and 2) infer the identities of electroactive compounds catalogued in a library from an experimental electrochemical dataset. Each of these functions is separately presented as its own subroutine and can be run independently, if desired.
+BayES’Lab (Bayesian Electroactive Species Labeling) is a repository of functions that can both 1) estimate electrochemical-transport parameters of analytes (i.e., redox active species) and 2) infer the identities of analytes that are catalogued in a library from an experimental electrochemical dataset. Each of these functions is separately presented as its own subroutine and can be run independently, if desired.
 
-See below for implementation instructions and details. Further, this repository was developed for and in tandem with the manuscript “Using voltammetry augmented with physics-based modeling and Bayesian hypothesis testing to estimate electrolyte composition" (submitted, preprint found <a href="https://chemrxiv.org/articles/preprint/Using_Voltammetry_Augmented_with_Physics-Based_Modeling_and_Bayesian_Hypothesis_Testing_to_Estimate_Electrolyte_Composition/14479707/1">here</a>). <b><i>Please cite this paper if you use this package.</b></i>
+See below for implementation instructions and details. Further, this repository was developed for and in tandem with the manuscript “Using voltammetry augmented with physics-based modeling and Bayesian hypothesis testing to estimate electrolyte composition" (submitted, preprint found <a href="https://chemrxiv.org/engage/chemrxiv/article-details/60e3b4d5e9241939d0e2f2d0">here</a>). <b><i>Please cite this paper if you use this package.</b></i>
 
 <b>Code style:</b> MATLAB®
 
 ## Overview
   
-Voltammetric capabilities may be enhanced by joining inferential analysis with electrochemical physical modeling. One such application is automated identification of electroactive compounds. As such, the goal of this project was to use first-principles simulation and Bayesian inference to label electroactive compounds by 1) creating a library with training datasets and 2) applying this library to testing data.
+Voltammetric capabilities may be enhanced by joining inferential analysis with electrochemical physical modeling. One such application is automated identification of analytes in solution. As such, the goal of this project was to use first-principles simulation and Bayesian inference to label analytes by 1) creating a library with training datasets and 2) applying this library to testing data.
 
 This labeling process is achieved with two corresponding and overarching modules: <b>Library Development</b> and <b>Compound Identification</b>. As already mentioned, both are included in this repository and can be run either sequentially (<b>Library Development</b> --> <b>Compound Identification</b>) or separately.
 
 The <b>Library Development</b> module takes multiple cyclic square wave (CSW) voltammograms and other relevant inputs (e.g., experimental parameters, initial guesses) to estimate the electron transfer mechanism and the corresponding electrochemical-transport descriptors. <b>Although the intended purpose of this code was to create a library of species for compound identification, it can also be used to extract electrochemical-transport descriptors from a known compound of interest for its own end</b> using CSW voltammograms acquired on a planar working electrode in a three-electrode configuration.
 
-The <b>Compound Identification</b> module, in turn, uses a library of parameters (either externally supplied or assembled using the <b>Library Development</b> module) to examine new experimental data and estimate the composition of redox-active compounds in the electrolyte. <b>The Compound Identification module can be used to identify electroactive species catalogued in a library using either <i>in situ</i> CSW voltammetry or cyclic voltammetry (CV) in near-real time (> 3 min).</b>
+The <b>Compound Identification</b> module, in turn, uses a library of parameters (either externally supplied or assembled using the <b>Library Development</b> module) to examine new experimental data and estimate the composition of an anolyte solution (i.e., solvent, supporting salt, and analyte(s)). <b>The Compound Identification module can be used to identify analytes catalogued in a library using either <i>in situ</i> CSW voltammetry or cyclic voltammetry (CV) in near-real time (> 3 min).</b>
 
 ## Framework
 
@@ -27,7 +27,7 @@ The Parallel Computing Toolbox, in turn, can be found <a href="https://www.mathw
 
 ## Use
 
-The following sections contain information on how to use BayES’Lab. As mentioned above, there are two modules: <b>Library Development</b> and <b>Compound Identification</b>. These may be run either indepdently or sequentially; for the latter, a library can be constructed using the <b>Library Development</b> module, which can then be applied to the <b>Compound Identification</b> module to identify electroactive compounds. Note that for each module, there are a list of inputs/outputs, example script(s), command-line use instructions, and for <b>Library Development</b>, instructions for use on the MIT Supercloud (in theory, any supercomputing resource can be used with the appropriate modifications).
+The following sections contain information on how to use BayES’Lab. As mentioned above, there are two modules: <b>Library Development</b> and <b>Compound Identification</b>. These may be run either indepdently or sequentially; for the latter, a library can be constructed using the <b>Library Development</b> module, which can then be applied to the <b>Compound Identification</b> module to identify analytes. Note that for each module, there are a list of inputs/outputs, example script(s), command-line use instructions, and for <b>Library Development</b>, instructions for use on the MIT Supercloud (in theory, any supercomputing resource can be used with the appropriate modifications).
 
 ### Library Development
 
@@ -41,8 +41,8 @@ This module estimates both the electron transfer mechanism, along with the corre
 - <b>paramguess:</b> initial guesses for the electrochemical-transport descriptors to be estimated
 - <b>conc:</b> concentrations of the species that comprise each CSW voltammogram (mol L<sup>-1</sup>)
 - <b>ninitguess:</b> number of initial guesses to be conducted
-- <b>bsubtract:</b> the difference current when no redox-active species are present; used for background correction (&mu;A)
-- <b>data_ref:</b> CSW voltammogram of the redox-active compound of interest and a second compound used to calibrate a pseudoreference electrode to a known redox event
+- <b>bsubtract:</b> the difference current when no analytes are present; used for background correction (&mu;A)
+- <b>data_ref:</b> CSW voltammogram of the analyte of interest and a second compound used to calibrate a pseudoreference electrode to a known redox event
 - <b>data_bgref:</b> CSW voltammogram of only the compound used to calibrate the pseudoreference; used to calibrate the background current
 - <b>prior:</b> prior probabilities for each electron transfer mechanism. Used in Bayes' Rule
 
@@ -127,7 +127,7 @@ simtime=toc;
 
 ```
 
-The first block of lines must be uncommented to convert structures to a usable format (vectors and matrices); files directly loaded into the function in the emacs script above are input as structures. The other blocks are uncommented to save the function outputs; MIT Supercloud does not save the function outputs otherwise. Note that the names of the variables will also have to be adjusted for different compounds (e.g., conc=conc.conc_inMPT for MPT, etc.).
+The first block of lines must be uncommented to convert structures to a usable format (vectors and matrices); files directly loaded into the function in the emacs script above are input as structures. The other blocks are uncommented to save the function outputs; MIT Supercloud does not otherwise save the function outputs. Note that the names of the variables will also have to be adjusted for different compounds (e.g., conc=conc.conc_inMPT for MPT, etc.).
 
 These blocks correspond to lines 183-190, lines 230-238, and line 242, respectively, in library_entry_params_compound.m.
 
@@ -135,23 +135,23 @@ These blocks correspond to lines 183-190, lines 230-238, and line 242, respectiv
 
 #### General
 
-This module estimates the composition of redox-active species in an electrolyte, and currently accepts both CVs and CSWVs as inputs.
+This module estimates the composition of an analyte solution, and currently accepts both CVs and CSWVs as inputs.
 
 <b>Inputs</b>
 - <b>data:</b> a single voltammogram from which compounds will be estimated
 - <b>params:</b> input parameters necessary for the module to operate. Examples include the working electrode radius, the temperature, and the solution resistance
 - <b>ninitguess:</b> number of initial guesses to be conducted
 - <b>lib:</b> the library to be referenced for compound identification
-- <b>bsubtract:</b> the (difference) current when no redox-active species is present; used for background correction (&mu;A for CSW voltammetry, mA for CV)
-- <b>data_ref:</b> voltammogram of the redox-active compound of interest and a second compound used to calibrate a pseudoreference electrode to a known redox event
+- <b>bsubtract:</b> the (difference) current when no analytes are present; used for background correction (&mu;A for CSW voltammetry, mA for CV)
+- <b>data_ref:</b> voltammogram of the analyte of interest and a second compound used to calibrate a pseudoreference electrode to a known redox event
 - <b>data_bgref:</b> voltammogram of only the compound used to calibrate the pseudoreference; used to calibrate the background current
 - <b>prior:</b> prior probabilities for each electron transfer mechanism. Used in Bayes' Rule
 - <b>type:</b> numerical input to determine whether a CV or CSW voltammetry is being analyzed
 
 <b>Outputs</b>
-- <b>P:</b> probability of each compound being present in the electrolyte
-- <b>conc0:</b> the estimated concentrations of the compounds estimated using regression alone (mol m<sup>-3</sup>)
-- <b>concfinal:</b> the estimated concentrations of the compounds estimated using both regression and binary hypothesis testing (should be more accurate than conc0, in units of mol m<sup>-3</sup>)
+- <b>P:</b> probability of each analyte being present in the analyte solution
+- <b>conc0:</b> the estimated concentrations of the analytes from regression alone (mol m<sup>-3</sup>)
+- <b>concfinal:</b> the concentrations of the analytes estimated using both regression and binary hypothesis testing (should be more accurate than conc0, in units of mol m<sup>-3</sup>)
 - <b>conclbfinal:</b> lower bound estimate of concfinal (mol m<sup>-3</sup>)
 - <b>concubfinal:</b> upper bound estimate of concfinal (mol m<sup>-3</sup>)
 - <b>Estep:</b> the post-corrected potential data (V vs. ref)
@@ -163,9 +163,9 @@ This module estimates the composition of redox-active species in an electrolyte,
 
 #### Example Script
 
-To run an example script to estimate the composition of an electrolyte containing unsubstituted and methyl phenothiazine using CV, <b>download the repository, open the directory to be "BayES-Lab/", open the script "Example_Script_Compound_Identification_CV.m", and run the script (no function inputs are needed).</b> Note that similarly to the library development module, text is output onto the command window to display the progress of the protocol.
+To run an example script to estimate the composition of an analyte solution containing unsubstituted and methyl phenothiazine using CV, <b>download the repository, open the directory to be "BayES-Lab/", open the script "Example_Script_Compound_Identification_CV.m", and run the script (no function inputs are needed).</b> Note that similarly to the library development module, text is output onto the command window to display the progress of the protocol.
 
-<b>To run an example script for CSW voltammetry taken from the same electrolyte, perform the above procedure for "Example_Script_Compound_Identification_CSWV.m".</b>
+<b>To run an example script for CSW voltammetry taken from the same analyte solution, perform the above procedure for "Example_Script_Compound_Identification_CSWV.m".</b>
 
 Note that with the exact inputs in this script, two warnings will appear that say there will be no adjustment of the reference potential. This is normal and expected. If the Parallel Computing Toolbox is being used, a warning may be issued for every type of parameter in the library, as they are uninitialized temporary variables; this is also okay and expected.
 
@@ -183,9 +183,9 @@ To run the protocol for a representative CSW voltammogram, type the following in
 
 ```
 
-To evaluate other datasets, change the first input to evaluate whichever dataset you would like to study. For example, if you want to evaluate the second dataset from the first electrolyte, the first input should be "PTMPTdatafirstelyte(:,5:8)", and if you want to evaluate the first dataset from the second electrolyte, the first input should be "PTMPTsecondelyte(:,1:4)". Note that each trial is represented by four columns in the data matrix. This general notation framework also holds for cyclic voltammograms, with one minor change (<i>vide infra</i>).
+To evaluate other datasets, change the first input to evaluate whichever dataset you would like to study. For example, if you want to evaluate the second dataset from the first analyte solution, the first input should be "PTMPTdatafirstelyte(:,5:8)", and if you want to evaluate the first dataset from the second analyte solution, the first input should be "PTMPTsecondelyte(:,1:4)". Note that each trial is represented by four columns in the data matrix. This general notation framework also holds for cyclic voltammograms, with one minor change (<i>vide infra</i>).
 
-In addition to changing the first input, the solution resistance must be updated accordingly. This can be performed by changing the 9th value of the "params_indata" cell from the vector "CSWV_sol_res". The resistances in "CSWV_sol_res" are grouped by electrolyte; for example, the second entry of this vector corresponds to the second trial of the first electrolyte. Further, the seventh entry corresponds to the first trial of the second electrolyte, and the 16th entry corresponds to the fourth trial of the third electrolyte, etc. <i>Explicitly, for the two cases described in the paragraph above, the lines "params_indata{9}=CSWV_sol_res(2);" and "params_indata{9}=CSWV_sol_res(7);" must also be respectively submitted before running the protocol. The table in the "Cyclic Voltammetry" subsection immediately below is labeled using the same methodology, and as such may also serve as a useful reference for connecting an electrolyte and trial number with the appropriate entry in "CSWV_sol_res".</i>
+In addition to changing the first input, the solution resistance must be updated accordingly. This can be performed by changing the 9th value of the "params_indata" cell from the vector "CSWV_sol_res". The resistances in "CSWV_sol_res" are grouped by each analyte solution; for example, the second entry of this vector corresponds to the second trial of the first analyte solution. Further, the seventh entry corresponds to the first trial of the second analyte solution, and the 16th entry corresponds to the fourth trial of the third analyte solution, etc. <i>Explicitly, for the two cases described in the paragraph above, the lines "params_indata{9}=CSWV_sol_res(2);" and "params_indata{9}=CSWV_sol_res(7);" must also be respectively submitted before running the protocol. The table in the "Cyclic Voltammetry" subsection immediately below is labeled using the same methodology, and as such may also serve as a useful reference for connecting an analyte solution and trial number with the appropriate entry in "CSWV_sol_res".</i>
 
 ##### Cyclic Voltammetry
 
@@ -197,28 +197,28 @@ To run the protocol for a representative cyclic voltammogram, type the following
 
 ```
 
-To evaluate other cyclic voltammograms, more inputs need to be adjusted compared to the case with CSW voltammetry. The table below lists the inputs used to generate the results for all 18 cyclic voltammograms in the manuscript. In this table, note that "a" and "b" refer to the terms used in the first input of the code; specifically, "PTMPTCVdatafirstelyte(a:b,1:2)", etc. Other notation pertaining to the first input is the same as in the case of CSW voltammetry, except that input data for each trial is only two columns. As an example, the third trial of the second electrolyte should be written as "PTMPTCVdatasecondelyte(a:b,5:6)", rather than "PTMPTCVdatasecondelyte(a:b,9:12)". Further, the variables "CV_pps", "CV_sr", and "CV_sol_res" are .mat files located in the "Compound Identification" folder.
+To evaluate other cyclic voltammograms, more inputs need to be adjusted compared to the case with CSW voltammetry. The table below lists the inputs used to generate the results for all 18 cyclic voltammograms in the manuscript. In this table, note that "a" and "b" refer to the terms used in the first input of the code; specifically, "PTMPTCVdatafirstelyte(a:b,1:2)", etc. Other notation pertaining to the first input is the same as in the case of CSW voltammetry, except that input data for each trial is only two columns. As an example, the third trial of the second analyte solution should be written as "PTMPTCVdatasecondelyte(a:b,5:6)", rather than "PTMPTCVdatasecondelyte(a:b,9:12)". Further, the variables "CV_pps", "CV_sr", and "CV_sol_res" are .mat files located in the "Compound Identification" folder.
 
-| Electrolyte number (E):<br>Trial number (T) | a | b | params_indataCV{7} <br>(simulation time mesh,<br>points per second; 1/s) | params_indataCV{8} <br>(scan rate, mV/s) | params_indataCV{9} <br>(resistance, &Omega;) |
+| Analyte solution number (A):<br>Trial number (T) | a | b | params_indataCV{7} <br>(simulation time mesh,<br>points per second; 1/s) | params_indataCV{8} <br>(scan rate, mV/s) | params_indataCV{9} <br>(resistance, &Omega;) |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-| E1:T1 | 169 | end-168 | CV_pps(1) | CV_sr(1) | CV_sol_res(1) |
-| E1:T2 | 169 | end-168 | CV_pps(2) | CV_sr(2) | CV_sol_res(2) |
-| E1:T3 | 169 | end-168 | CV_pps(3) | CV_sr(3) | CV_sol_res(3) |
-| E1:T4 | 149 | end-248 | CV_pps(4) | CV_sr(4) | CV_sol_res(4) |
-| E1:T5 | 155 | end-214 | CV_pps(5) | CV_sr(5) | CV_sol_res(5) |
-| E1:T6 | 90 | end-509 | CV_pps(6) | CV_sr(6) | CV_sol_res(6) |
-| E2:T1 | 155 | end-155 | CV_pps(7) | CV_sr(7) | CV_sol_res(7) |
-| E2:T2 | 155 | end-175 | CV_pps(8) | CV_sr(8) | CV_sol_res(8) |
-| E2:T3 | 155 | end-195 | CV_pps(9) | CV_sr(9) | CV_sol_res(9) |
-| E2:T4 | 155 | end-315 | CV_pps(10) | CV_sr(10) | CV_sol_res(10) |
-| E2:T5 | 155 | end-315 | CV_pps(11) | CV_sr(11) | CV_sol_res(11) |
-| E2:T6 | 55 | end-645 | CV_pps(12) | CV_sr(12) | CV_sol_res(12) |
-| E3:T1 | 200 | end-200 | CV_pps(13) | CV_sr(13) | CV_sol_res(13) |
-| E3:T2 | 200 | end-200 | CV_pps(14) | CV_sr(14) | CV_sol_res(14) |
-| E3:T3 | 200 | end-210 | CV_pps(15) | CV_sr(15) | CV_sol_res(15) |
-| E3:T4 | 180 | end-305 | CV_pps(16) | CV_sr(16) | CV_sol_res(16) |
-| E3:T5 | 180 | end-260 | CV_pps(17) | CV_sr(17) | CV_sol_res(17) |
-| E3:T6 | 90 | end-590 | CV_pps(18) | CV_sr(18) | CV_sol_res(18) |
+| A1:T1 | 169 | end-168 | CV_pps(1) | CV_sr(1) | CV_sol_res(1) |
+| A1:T2 | 169 | end-168 | CV_pps(2) | CV_sr(2) | CV_sol_res(2) |
+| A1:T3 | 169 | end-168 | CV_pps(3) | CV_sr(3) | CV_sol_res(3) |
+| A1:T4 | 149 | end-248 | CV_pps(4) | CV_sr(4) | CV_sol_res(4) |
+| A1:T5 | 155 | end-214 | CV_pps(5) | CV_sr(5) | CV_sol_res(5) |
+| A1:T6 | 90 | end-509 | CV_pps(6) | CV_sr(6) | CV_sol_res(6) |
+| A2:T1 | 155 | end-155 | CV_pps(7) | CV_sr(7) | CV_sol_res(7) |
+| A2:T2 | 155 | end-175 | CV_pps(8) | CV_sr(8) | CV_sol_res(8) |
+| A2:T3 | 155 | end-195 | CV_pps(9) | CV_sr(9) | CV_sol_res(9) |
+| A2:T4 | 155 | end-315 | CV_pps(10) | CV_sr(10) | CV_sol_res(10) |
+| A2:T5 | 155 | end-315 | CV_pps(11) | CV_sr(11) | CV_sol_res(11) |
+| A2:T6 | 55 | end-645 | CV_pps(12) | CV_sr(12) | CV_sol_res(12) |
+| A3:T1 | 200 | end-200 | CV_pps(13) | CV_sr(13) | CV_sol_res(13) |
+| A3:T2 | 200 | end-200 | CV_pps(14) | CV_sr(14) | CV_sol_res(14) |
+| A3:T3 | 200 | end-210 | CV_pps(15) | CV_sr(15) | CV_sol_res(15) |
+| A3:T4 | 180 | end-305 | CV_pps(16) | CV_sr(16) | CV_sol_res(16) |
+| A3:T5 | 180 | end-260 | CV_pps(17) | CV_sr(17) | CV_sol_res(17) |
+| A3:T6 | 90 | end-590 | CV_pps(18) | CV_sr(18) | CV_sol_res(18) |
 
 ## Developer Use
 
@@ -252,7 +252,7 @@ Before submitting your own issue, make sure the same one does not already exist 
 
 1.	Write step by step directions for replicating your issue
 2.	Describe what you would expect to happen and what you actually get
-3.  Provide relevant screenshots
+3.  Provide relevant documentation or screenshots
 4.	Include your operating system version and MATLAB® version
 
 ## Pull Requests
@@ -272,9 +272,9 @@ A general description of variables is provided here. More specificity, including
 - paramsguess = a guess for the parameters that will be estimated
 - conc = a vector of concentrations, used for fitting the experimental data with a model
 - ninitguess = number of initial guesses. The parameter space is assumed to be very noisy, with many local minima. As such, many initial guesses are likely needed to increase the changes of obtaining the global minimum 
-- bsubtract = a scan with no redox couples present. Used to find the background current for subtraction from the experimental data
+- bsubtract = a scan with no analytes present. Used to find the background current for subtraction from the experimental data
 - data_ref = the experimental data with a reference redox couple added to adjust the potential to be referenced versus a desired redox event (e.g., ferrocene)
-- data_bgref = a dataset where the only active species is the reference redox couple. Used to adjust the potential of the background current
+- data_bgref = a dataset where the only analyte present is the reference redox couple. Used to adjust the potential of the background current
 - prior = prior probabilities of a given electron transfer mechanism
 - return = paramsfound (estimated parameters), paramslb (lower bound of the estimates), paramsub (upper bound of the estimates), ETM (the estimated electron transfer mechanism), PETM (the probability of the estimated electron transfer mechanism), dataEstep (the processed experimental potential), dataInet (the processed experimental current), inetsim (the simulated current), Eref (the redox potential of the reference redox couple vs. the original reference electrode used), and simtime (the simulation time, for internal consumption)
 
@@ -287,12 +287,12 @@ Accepts experimental data and outputs the estimated electron transfer mechanism 
 - data_ref = same as in library_entry_params_compound
 - data_bgref = same as in library_entry_params_compound
 - iter = indicator for the number of trials to be averaged in the parameter / ETM estimation process
-- option = option to allow / not allow for background correction
+- option = option to enable / not enable for background correction
 - paramsin = same as in library_entry_params_compound
 - conc = same as in library_entry_params_compound
 - return = dataV (the processed experimental potential), dataInet (the processed difference current), Idatastd (the experimental standard deviation of the current), dataEstep (the baseline potential), and Eref (the amount the potential was adjusted based on that of the reference redox couple)
 
-Pre-processes the data by performing iR correction, adjusting the potentials to that of a different, desired redox couple (if desired), and performing background subtraction. Enables data pre-processing in a consistent manner.
+Pre-processes the data by performing iR correction, adjusting the potentials to that of a different redox event (if desired), and performing background subtraction. Enables data pre-processing in a consistent manner.
 
 
 <b>iR_correction</b>(dataV,dataI,R,comp)
@@ -306,11 +306,11 @@ iR-corrects potentials (both baseline and regular).
 
 
 <b>reference_correction</b>(dataEstep_comp,dataInet_comp,dataV,data_ref,Rref,comp,bg)
-- datatEstep_comp = the baseline potential of the voltammogram with the compound of interest
-- dataInet_comp = the difference current of the voltammogram with the compound of interest
-- dataV = the potential of the voltammogram with the compound of interest
+- datatEstep_comp = the baseline potential of the voltammogram with the analyte of interest
+- dataInet_comp = the difference current of the voltammogram with the analyte of interest
+- dataV = the potential of the voltammogram with the analyte of interest
 - data_ref = same as in library_entry_params_compound
-- Rref = the resistance of the electrolyte containing both the compound of interest and the reference redox couple
+- Rref = the resistance of the analyte solution containing both the analyte of interest and the reference redox couple
 - comp = the compensation automatically implemented by the potentiostat
 - bg = indicator of whether the background voltammogram or that with the compound of interest is having its potential shifted
 - return = dataEstep (the shifted baseline potential), dataVnew (the shifted potential), Eref (the amount the potentials were shifted by)
@@ -396,7 +396,7 @@ This function interpolates the potential to the desired number of substeps. This
 - h = the initial dimensionless step size
 - return = conc (the concentration profile of the active species at a given time point during the simulation of a voltammogram)
 
-This function sets up and solves the governing partial differential equations in a voltammetric simulation by creating a finite difference framework and solving via linear algebra.
+This function sets up and solves the governing partial differential equations in a voltammetric simulation by creating a finite difference framework and solving <i>via</i> linear algebra.
 
 
 <b>Difference_current_extract</b>(J,E,b,ind,maxind)
@@ -431,14 +431,14 @@ We note that multiple functions in this module are similar, but not the same, as
 - params = relevant parameters for the experiment, such as the radius of the working electrode and the voltammetric waveform (e.g., pulse height, scan rate)
 - ninitguess = the number of randomized initial concentration guesses the protocol will iterate through
 - lib = library of compounds, with relevant parameters listed
-- bsubtract = a dataset of blank electrolyte (only solvent and supporting salt) for baseline subtraction. Multiple trials are necessary to evaluate a mean background current and its standard deviation
-- data_ref = a single experimental voltammogram of the electrolyte of interest that also has added a redox-active compound whose redox potential can be used for referencing the applied potential. An example is an electrolyte with ferrocene intentionally added to reference all the redox events to the redox potential of ferrocene
-- data_bgref = multiple trials of a blank electrolyte containing a redox-active compound used for referencing the potential. Used both to reference the potential of the background current and to estimate the standard deviation of the current as a function of the magnitude of the current
+- bsubtract = a dataset of a solution containing only solvent and supporting salt for baseline subtraction. Multiple trials are necessary to evaluate a mean background current and its standard deviation
+- data_ref = a single experimental voltammogram of the analyte of interest that also has an additional analyte whose redox potential can be used for referencing the applied potential. An example is a solution with ferrocene intentionally added to reference all the redox events to the redox potential of ferrocene
+- data_bgref = multiple trials of an analyte solution with only one redox-active compound used to reference the potential. Used both to reference the potential of the background current and to estimate the standard deviation of the current as a function of the magnitude of the current
 - prior = prior probability of existence assigned to each compound in the library, in line with the Bayesian framework
 - type = determines whether cyclic voltammetry data or CSW voltammetry data is being analyzed. type=1 means a CV is being analyzed; any other number means a CSW voltammogram is being analyzed
-- return = P (the probability that each compound is present in the electrolyte), conc0 (the vector of best-fit concentrations for all the compounds in the library before culling via Bayesian inference), concfinal (the vector of best-fit concentrations after culling occurs), conclbfinal (the lower bound estimate of concfinal), concubfinal (the upper bound estimate of concfinal), Estep (the post-processed experimental potential or baseline potential), inet0 (the vector of simulated currents before culling), inet (the vector of simulated currents after culling), dataInet (the post-processed data current to be fitted), Eref (the redox potential of the reference redox couple vs. the original reference electrode used), simtime (the time for the simulation)
+- return = P (the probability that each compound is present), conc0 (the vector of best-fit concentrations for all the compounds in the library before culling via Bayesian inference), concfinal (the vector of best-fit concentrations after culling occurs), conclbfinal (the lower bound estimate of concfinal), concubfinal (the upper bound estimate of concfinal), Estep (the post-processed experimental potential or baseline potential), inet0 (the vector of simulated currents before culling), inet (the vector of simulated currents after culling), dataInet (the post-processed data current to be fitted), Eref (the redox potential of the reference redox couple vs. the original reference electrode used), simtime (the time for the simulation)
 
-This function is the parent function used to estimate the probabilities of each compound being present in solution. It first pre-processes the data (e.g., ohmic compensation), and then simulates concentration-normalized voltammograms based on the library parameters for each compound. These concentration-normalized voltammograms are then regressed to a new experimental dataset to yield a vector of best-fit concentrations. Identification of each compound then takes place by accounting for the goodness of fit and the parsimoniousness of the model when each compound is excluded (the null hypothesis) and when it is included (the alternative hypothesis) to report the probability that the compound in question is present.
+This function is the parent function used to estimate the probabilities of each compound being present in solution. It first pre-processes the data (e.g., ohmic compensation), and then simulates concentration-normalized voltammograms based on the library parameters for each compound. These concentration-normalized voltammograms are then regressed to a new experimental dataset to yield a vector of best-fit concentrations. Identification of each analyte then takes place by accounting for the goodness of fit and the parsimoniousness of the model when each compound is excluded (the null hypothesis) and when it is included (the alternative hypothesis) to report the probability that the compound in question is present.
 
 
 <b>voltammogram_conc_fitting_protocol</b>(dataInet,dataIstd,phi,ninitguess,concguess,lib,fittype)
