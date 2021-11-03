@@ -2,7 +2,7 @@
 
 BayES’Lab (Bayesian Electroactive Species Labeling) is a repository of functions that can both 1) estimate electrochemical-transport parameters of analytes (i.e., redox active species) and 2) infer the identities of analytes that are catalogued in a library from an experimental electrochemical dataset. Each of these functions is separately presented as its own subroutine and can be run independently, if desired.
 
-See below for implementation instructions and details. Further, this repository was developed for and in tandem with the manuscript “Using voltammetry augmented with physics-based modeling and Bayesian hypothesis testing to estimate electrolyte composition" (submitted, preprint found <a href="https://chemrxiv.org/engage/chemrxiv/article-details/60e3b4d5e9241939d0e2f2d0">here</a>). <b><i>Please cite this paper if you use this package.</b></i>
+See below for implementation instructions and details. Further, this repository was developed for and in tandem with the manuscript “Using voltammetry augmented with physics-based modeling and Bayesian hypothesis testing to identify analytes in electrolyte solutions" (accepted in Journal of Electroanalytical Chemistry; journal pre-proof <a href="https://www.sciencedirect.com/science/article/abs/pii/S1572665721007773">here</a> and ChemRxiv<sup>TM</sup> preprint <a href="https://chemrxiv.org/engage/chemrxiv/article-details/611fada71d1cc2125fc8ad27">here</a>). <b><i>Please cite this paper if you use this package.</b></i>
 
 <b>Code style:</b> MATLAB®
 
@@ -235,7 +235,7 @@ Conversely, you may directly download the repository from the online page.
 Congratulations! BayES'Lab is now installed! With this basic installation, you will have access to the functions therein.
 
 # Credits
-Alexis M Fenton Jr. | Fikile R. Brushett | MIT Supercloud
+Alexis M. Fenton Jr. | Fikile R. Brushett | MIT Supercloud
 
 # Contribute
 Thank you for your interest in augmenting the capabilities of voltammetry through inferential methods!
